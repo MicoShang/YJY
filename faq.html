@@ -1,0 +1,831 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Troubleshooting FAQ · Yujia Yang 使用手册</title>
+<meta name="description" content="Common questions answered, plus what to do when things go sideways.">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#f6f4f1">
+<link rel="icon" type="image/jpeg" href="assets/doc-yang-avatar-256.jpg">
+<style>
+@font-face{font-family:'Archivo';font-style:normal;font-weight:400 900;font-display:swap;src:url("assets/fonts/archivo-latin.woff2") format('woff2');}
+@font-face{font-family:'Caveat';font-style:normal;font-weight:400 700;font-display:swap;src:url("assets/fonts/caveat-latin.woff2") format('woff2');}
+@font-face{font-family:'FaqHand';font-style:normal;font-weight:400;font-display:swap;src:url("assets/faq-handwriting.ttf") format('truetype');}
+  :root{
+    --paper:#f4f1ec;
+    --paper-soft:#faf6ef;
+    --letter:#fffdf7;
+    --ink:#1a1714;
+    --ink-soft:#4b443d;
+    --muted:#756b62;
+    --faint:#9a8f84;
+    --line:rgba(26,23,20,.14);
+    --line-strong:rgba(26,23,20,.28);
+    --accent:#bd3d59;
+    --accent-deep:#8e2641;
+    --envelope:#f2e8d9;
+    --envelope-flap:#f6eee2;
+    --envelope-edge:rgba(92,71,48,.22);
+    --f-display:'Archivo',"PingFang SC","Hiragino Sans GB",system-ui,-apple-system,sans-serif;
+    --f-hand:'Caveat','Segoe Script',cursive;
+    --f-hand-zh:'FaqHand','Kaiti SC','STKaiti',serif;
+    --f-mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"PingFang SC","Hiragino Sans GB",monospace;
+    --avatar:url("assets/doc-yang-avatar-256.jpg");
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+  body{
+    margin:0;min-height:100vh;overflow-x:hidden;color:var(--ink);
+    background:
+      radial-gradient(ellipse at 50% -6%,rgba(255,255,255,.78),rgba(255,255,255,0) 39%),
+      radial-gradient(ellipse at 92% 28%,rgba(232,218,230,.58),rgba(232,218,230,0) 34%),
+      radial-gradient(ellipse at 7% 82%,rgba(244,230,222,.5),rgba(244,230,222,0) 32%),
+      linear-gradient(142deg,#d9e1f1 0%,#e6e3ee 35%,#f2eae9 67%,#f7f0e7 100%);
+    background-attachment:fixed;
+    font-family:var(--f-display);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+    text-rendering:optimizeLegibility;-webkit-print-color-adjust:exact;print-color-adjust:exact;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.38;
+    background-image:
+      radial-gradient(circle at 1px 1px,rgba(49,50,68,.06) 1px,transparent 1.35px),
+      linear-gradient(115deg,rgba(255,255,255,.34),rgba(255,255,255,0) 42%,rgba(189,61,89,.025) 78%,rgba(255,255,255,.24));
+    background-size:7px 7px,100% 100%;
+  }
+  body::after{
+    content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+    box-shadow:inset 0 0 170px rgba(75,78,103,.08);
+  }
+  ::selection{background:rgba(189,61,89,.18);}
+  a,button,input{-webkit-tap-highlight-color:transparent;}
+  a:focus-visible,button:focus-visible,input:focus-visible{
+    outline:2px solid var(--accent);outline-offset:4px;
+  }
+  [hidden]{display:none !important;}
+
+  .wrap{max-width:1080px;margin:0 auto;padding:24px clamp(20px,5vw,48px) 64px;}
+
+  /* ---------- chrome ---------- */
+  .top{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:56px;}
+  .avatar{
+    width:52px;height:52px;border-radius:50%;flex:0 0 auto;
+    background-color:#f4f2ef;background-image:var(--avatar);
+    background-size:cover;background-position:50% 20%;background-repeat:no-repeat;
+    box-shadow:0 10px 22px -12px rgba(23,20,18,.55),inset 0 0 0 1px rgba(23,20,18,.10);
+    transition:transform .22s ease;
+  }
+  .avatar:hover{transform:translateY(-2px) rotate(-2deg);}
+  .back{
+    font-family:var(--f-mono);font-size:.78rem;font-weight:700;letter-spacing:.045em;
+    color:var(--ink-soft);text-decoration:none;border-bottom:2px solid transparent;padding-bottom:3px;
+    transition:color .2s ease,border-color .2s ease;
+  }
+  .back:hover{color:var(--accent-deep);border-bottom-color:var(--accent);}
+
+  main{padding-top:clamp(20px,3.2vw,36px);}
+  .meta-strip{
+    display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:clamp(10px,2vw,24px);
+    padding:0 2px 14px;border-bottom:1px solid var(--line-strong);
+    font-family:var(--f-mono);font-size:.67rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  .meta-strip span:nth-child(2),.meta-strip span:nth-child(4){color:var(--accent);letter-spacing:.02em;}
+  .meta-strip span:nth-child(3){text-align:center;color:var(--muted);}
+  .meta-strip span:last-child{text-align:right;}
+
+  .sr-only{
+    position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+    clip:rect(0,0,0,0);white-space:nowrap;border:0;
+  }
+
+  /* ---------- envelope scene ---------- */
+  .letter-stage{
+    position:relative;display:grid;place-items:center;min-height:clamp(620px,73vh,780px);
+    margin-top:clamp(14px,2vw,24px);
+  }
+  .envelope-trigger{
+    position:relative;z-index:2;display:block;width:min(100%,920px);padding:0;border:0;background:none;
+    color:inherit;cursor:pointer;transform:rotate(-.7deg);
+    filter:drop-shadow(0 32px 24px rgba(68,49,28,.18));
+    transition:transform .48s cubic-bezier(.16,1,.3,1),filter .48s cubic-bezier(.16,1,.3,1);
+  }
+  .envelope-trigger:hover,.envelope-trigger:focus-visible{transform:rotate(0deg) translateY(-7px) scale(1.008);filter:drop-shadow(0 40px 30px rgba(68,49,28,.2));}
+  .envelope-trigger:active{transform:rotate(0deg) translateY(-2px) scale(.997);}
+
+  .envelope{
+    position:relative;display:block;width:100%;aspect-ratio:1.58/1;overflow:hidden;
+    border:1px solid var(--envelope-edge);border-radius:3px 5px 4px 3px;
+    background:
+      radial-gradient(circle at 14% 18%,rgba(255,255,255,.74),rgba(255,255,255,0) 30%),
+      radial-gradient(circle at 78% 72%,rgba(121,93,63,.045),rgba(121,93,63,0) 37%),
+      repeating-linear-gradient(0deg,rgba(107,82,55,.024) 0 1px,transparent 1px 5px),
+      repeating-linear-gradient(90deg,rgba(255,255,255,.10) 0 1px,transparent 1px 8px),
+      linear-gradient(155deg,#f8f2e8 0%,#f1e7d8 52%,#e8dac6 100%);
+    background-size:100% 100%,100% 100%,5px 5px,8px 8px,100% 100%;
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,.48),
+      inset 0 -20px 34px rgba(104,77,45,.045),
+      inset 16px 0 26px rgba(255,255,255,.13);
+  }
+  .envelope::before,.envelope::after{
+    content:"";position:absolute;z-index:1;bottom:0;width:58%;height:74%;pointer-events:none;
+  }
+  .envelope::before{
+    left:0;background:linear-gradient(34deg,rgba(115,87,57,.075),rgba(255,255,255,.015));
+    clip-path:polygon(0 0,100% 58%,100% 100%,0 100%);
+  }
+  .envelope::after{
+    right:0;background:linear-gradient(-34deg,rgba(255,255,255,.20),rgba(91,62,32,.055));
+    clip-path:polygon(100% 0,0 58%,0 100%,100% 100%);
+  }
+  .envelope-flap{
+    position:absolute;z-index:4;inset:0 0 auto;height:61%;transform-origin:50% 0;
+    background:
+      repeating-linear-gradient(0deg,rgba(105,80,53,.018) 0 1px,transparent 1px 6px),
+      linear-gradient(178deg,rgba(255,255,255,.22),rgba(255,255,255,0) 38%),
+      linear-gradient(175deg,var(--envelope-flap) 0%,#eee1d0 100%);
+    clip-path:polygon(0 0,100% 0,50% 100%);
+    box-shadow:0 2px 4px rgba(68,48,26,.07),inset 0 -1px 0 rgba(255,255,255,.46);
+    transition:transform .52s cubic-bezier(.2,.8,.2,1);
+  }
+  .envelope-flap::after{
+    content:"";position:absolute;left:50%;bottom:0;width:80%;height:1px;transform:translateX(-50%);
+    background:rgba(104,78,50,.13);
+  }
+  .envelope-trigger:hover .envelope-flap,.envelope-trigger:focus-visible .envelope-flap{transform:perspective(900px) rotateX(8deg);}
+  .envelope-trigger.is-opening{transform:rotate(0) translateY(-3px) scale(1.004);filter:drop-shadow(0 38px 30px rgba(68,49,28,.2));}
+  .envelope-trigger.is-opening .envelope-flap{transform:perspective(900px) rotateX(168deg);}
+  .envelope-trigger.is-opening .seal{opacity:0;transform:translate(-50%,-50%) rotate(-18deg) scale(.72);}
+  .envelope-pocket{
+    position:absolute;z-index:3;left:0;right:0;bottom:0;height:70%;
+    background:
+      repeating-linear-gradient(90deg,rgba(105,80,53,.018) 0 1px,transparent 1px 7px),
+      linear-gradient(180deg,rgba(255,255,255,.09),rgba(141,99,53,.045));
+    clip-path:polygon(0 100%,0 12%,50% 66%,100% 12%,100% 100%);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.52);
+  }
+  .envelope-title-art{
+    position:absolute;z-index:5;left:6%;top:8%;width:54%;height:auto;pointer-events:none;
+    transform:rotate(-1.8deg);opacity:.84;mix-blend-mode:multiply;filter:contrast(1.06);
+  }
+  .seal{
+    position:absolute;z-index:6;left:50%;top:55%;display:grid;place-items:center;
+    width:clamp(50px,7vw,68px);aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%) rotate(-8deg);
+    background:
+      radial-gradient(circle at 34% 28%,rgba(255,255,255,.34),rgba(255,255,255,0) 28%),
+      radial-gradient(circle at 50% 50%,#c64b64 0 54%,#a62f4c 55% 72%,#8e2641 73%);
+    box-shadow:0 7px 12px rgba(90,31,44,.28),inset 0 0 0 3px rgba(255,255,255,.11);
+    color:#fff7f0;font-family:var(--f-mono);font-size:clamp(.62rem,1vw,.78rem);font-weight:800;letter-spacing:.08em;
+    transition:opacity .24s ease,transform .3s cubic-bezier(.2,.8,.2,1);
+  }
+  .seal::after{
+    content:"";position:absolute;inset:9px;border-radius:50%;border:1px dashed rgba(255,250,245,.44);
+  }
+  .postage{
+    position:absolute;z-index:7;right:6%;top:8%;display:grid;place-items:center;
+    width:clamp(54px,8vw,74px);aspect-ratio:1;border:1px solid rgba(108,75,39,.35);
+    background:rgba(255,251,244,.42);transform:rotate(4deg);
+    font-family:var(--f-mono);font-size:clamp(.56rem,.9vw,.7rem);font-weight:700;line-height:1.25;
+    letter-spacing:.08em;text-align:center;color:rgba(74,54,34,.7);
+    box-shadow:inset 0 0 0 4px rgba(255,251,244,.28),0 2px 5px rgba(83,61,38,.06);
+  }
+  .postage::before{content:"";position:absolute;inset:5px;border:1px dashed rgba(108,75,39,.25);}
+  .filmstrip{
+    position:absolute;z-index:7;right:10%;top:-2.5%;width:clamp(88px,15vw,132px);height:28px;
+    background:rgba(49,45,38,.62);transform:rotate(25deg);transform-origin:center;
+    border:2px solid rgba(37,34,29,.82);box-shadow:0 4px 9px rgba(31,23,15,.12);
+    background-image:
+      repeating-linear-gradient(90deg,transparent 0 8px,rgba(244,238,226,.76) 8px 12px,transparent 12px 20px),
+      repeating-linear-gradient(90deg,transparent 0 8px,rgba(244,238,226,.68) 8px 12px,transparent 12px 20px);
+    background-size:100% 5px,100% 5px;background-position:0 2px,0 calc(100% - 2px);background-repeat:no-repeat;
+    opacity:.8;
+  }
+  .address{
+    position:absolute;z-index:7;left:8%;bottom:4%;font-family:var(--f-mono);font-size:clamp(.5rem,.85vw,.64rem);
+    font-weight:700;line-height:1.5;letter-spacing:.08em;text-transform:uppercase;text-align:left;
+    color:rgba(74,54,34,.58);transform:rotate(-1deg);
+  }
+  .address strong{
+    display:block;margin-bottom:.12em;font-family:var(--f-hand);font-size:1.9em;font-weight:600;
+    line-height:1;letter-spacing:.01em;text-transform:none;color:rgba(61,45,31,.7);
+  }
+  /* ---------- page footer ---------- */
+  .sign{
+    display:flex;align-items:flex-end;justify-content:space-between;gap:clamp(24px,5vw,52px);
+    margin-top:clamp(34px,6vw,64px);padding-top:22px;border-top:1px solid var(--line);
+  }
+  .sign-copy{min-width:0;}
+  .sign-title{margin:0;display:flex;align-items:baseline;flex-wrap:wrap;gap:.4em;font-size:clamp(.98rem,1.9vw,1.08rem);font-weight:800;letter-spacing:-.01em;}
+  .sign-sep{color:var(--accent);font-weight:700;}
+  .sign-ver{color:var(--muted);font-weight:700;letter-spacing:.08em;}
+  .sign-sub{margin:.55em 0 0;max-width:64ch;font-size:.79rem;line-height:1.65;color:var(--muted);}
+  .studio-mark{
+    display:block;flex:0 0 auto;width:auto;height:clamp(22.5px,2.025vw,25.5px);opacity:.78;
+    filter:drop-shadow(0 1px 0 rgba(255,255,255,.28));
+  }
+
+  /* ---------- letter dialog ---------- */
+  .letter-dialog{
+    position:relative;width:min(840px,calc(100vw - 100px));max-width:none;height:auto;max-height:calc(100dvh - 24px);
+    margin:auto;padding:0;border:0;border-radius:2px;background:transparent;color:var(--ink);
+    overflow:clip;outline:0;
+  }
+  .letter-dialog::backdrop{background:rgba(46,37,28,.52);backdrop-filter:blur(5px) saturate(.72);}
+  .letter-dialog[open]{animation:dialog-in .32s cubic-bezier(.16,1,.3,1) both;}
+  .letter-dialog[open] .letter-close{animation:close-reveal .26s .82s both;}
+  .letter{
+    position:relative;min-height:calc(100dvh - 24px);max-height:calc(100dvh - 24px);
+    overflow:auto;overscroll-behavior:contain;padding:0;
+    transform-origin:50% 50%;perspective:1400px;
+    background:
+      linear-gradient(90deg,transparent 0 14.4%,rgba(189,61,89,.30) 14.4% 14.58%,transparent 14.58% 15.35%,rgba(189,61,89,.22) 15.35% 15.53%,transparent 15.53%),
+      repeating-linear-gradient(180deg,transparent 0 63px,rgba(73,94,116,.22) 63px 64px),
+      radial-gradient(circle at 1px 1px,rgba(26,23,20,.018) 1px,transparent 1.2px),
+      var(--letter);
+    background-size:100% 100%,100% 64px,6px 6px,100% 100%;
+    box-shadow:0 38px 90px -38px rgba(20,15,10,.52),0 3px 9px rgba(20,15,10,.14);
+  }
+  .letter.is-unfolding{
+    overflow:hidden;will-change:transform,opacity,filter,clip-path;
+    animation:letter-crumple-unfold 1.48s .12s cubic-bezier(.16,1,.3,1) both;
+  }
+  .letter-sticker-field{position:absolute;inset:0;z-index:3;pointer-events:none;}
+  .letter-sticker{
+    position:absolute;display:block;height:auto;pointer-events:none;user-select:none;
+    opacity:.9;filter:drop-shadow(0 12px 14px rgba(65,61,79,.14));
+    transform:rotate(var(--r,0deg));transform-origin:50% 55%;
+  }
+  .letter.is-unfolding .letter-sticker{animation:sticker-settle .52s 1.04s cubic-bezier(.16,1,.3,1) both;}
+  .letter-sticker-pink{left:-4%;top:37%;width:clamp(100px,13vw,145px);--r:-11deg;}
+  .letter-sticker-white{right:-3%;top:23%;width:clamp(88px,11vw,124px);--r:8deg;animation-delay:1.12s;}
+  .letter-sticker-bunny-main{right:3%;top:2%;width:clamp(60px,7vw,82px);--r:6deg;animation-delay:1.2s;}
+  .letter-sheet-shade{
+    position:absolute;inset:0;z-index:8;pointer-events:none;opacity:0;
+    background:
+      radial-gradient(ellipse at 24% 18%,rgba(89,69,48,.10),transparent 22%),
+      radial-gradient(ellipse at 72% 38%,rgba(89,69,48,.08),transparent 24%),
+      radial-gradient(ellipse at 43% 70%,rgba(89,69,48,.10),transparent 30%),
+      linear-gradient(112deg,transparent 33%,rgba(89,69,48,.13) 34%,transparent 35%),
+      linear-gradient(68deg,transparent 61%,rgba(89,69,48,.10) 62%,transparent 63%);
+  }
+  .letter.is-unfolding .letter-sheet-shade{
+    animation:sheet-crease-fade 1.48s .12s cubic-bezier(.16,1,.3,1) both;
+  }
+  .letter::before{
+    content:"";position:absolute;inset:11px;pointer-events:none;border:1px solid rgba(26,23,20,.12);
+  }
+  .letter::after{
+    content:"";position:absolute;left:12px;right:12px;top:42%;height:44px;pointer-events:none;
+    background:linear-gradient(180deg,transparent,rgba(26,23,20,.055),transparent);
+    opacity:.75;transform:scaleY(0);transform-origin:50% 50%;
+    animation:fold-soften .9s .08s cubic-bezier(.16,1,.3,1) both;
+  }
+  .paper-ball{
+    position:absolute;z-index:18;left:50%;top:50%;width:168px;height:158px;
+    transform:translate(-50%,-50%) scale(.12) rotate(-18deg);transform-origin:50% 52%;
+    opacity:0;pointer-events:none;filter:drop-shadow(0 24px 22px rgba(42,31,20,.24));
+  }
+  .paper-ball.is-unfolding{animation:paper-ball-open 1.15s .08s cubic-bezier(.22,.72,.22,1) both;}
+  .ball-shard,.ball-crease{position:absolute;display:block;pointer-events:none;}
+  .ball-shard{
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -4px 8px rgba(93,70,46,.08);
+    background:
+      linear-gradient(142deg,rgba(255,255,255,.62),rgba(255,255,255,0) 42%),
+      linear-gradient(160deg,#fbf7ef,#e4d3bc);
+  }
+  .ball-shard.s1{inset:12% 40% 38% 8%;clip-path:polygon(18% 26%,52% 2%,94% 20%,77% 73%,39% 100%,4% 67%);transform:rotate(-16deg);}
+  .ball-shard.s2{inset:2% 8% 42% 38%;clip-path:polygon(12% 25%,58% 0,100% 30%,87% 88%,38% 100%,0 63%);transform:rotate(10deg);background:linear-gradient(150deg,#f5ecdf,#dcc8ae);}
+  .ball-shard.s3{inset:34% 9% 4% 33%;clip-path:polygon(4% 16%,49% 0,96% 22%,100% 73%,57% 100%,0 78%);transform:rotate(-7deg);background:linear-gradient(150deg,#f9f3e9,#ddcab1);}
+  .ball-shard.s4{inset:28% 42% 10% 2%;clip-path:polygon(15% 0,90% 15%,100% 67%,57% 100%,0 73%,3% 26%);transform:rotate(14deg);background:linear-gradient(145deg,#eee1d1,#d8c1a4);}
+  .ball-shard.s5{inset:13% 24% 22% 24%;clip-path:polygon(16% 0,100% 18%,84% 100%,0 76%,4% 21%);transform:rotate(-3deg);background:linear-gradient(145deg,#fffaf2,#e3d1b9);}
+  .ball-crease{inset:20%;border-radius:50%;border:1px solid rgba(92,67,42,.13);}
+  .ball-crease.c1{transform:rotate(23deg) scaleX(1.3);}
+  .ball-crease.c2{transform:rotate(-31deg) scaleY(1.15);}
+  .letter-close{
+    position:absolute;z-index:20;right:-48px;top:4px;display:grid;place-items:center;
+    width:36px;height:36px;padding:0;border:1px solid var(--line-strong);
+    border-radius:50%;background:rgba(255,253,247,.82);color:var(--ink);font-family:var(--f-display);
+    font-size:1.4rem;line-height:1;cursor:pointer;backdrop-filter:blur(6px);
+    transition:background .2s ease,color .2s ease,transform .2s ease;
+  }
+  .letter-close:hover{background:var(--accent);color:#fff;transform:rotate(6deg);}
+  .letter-close:focus-visible{outline:2px solid rgba(189,61,89,.38);outline-offset:3px;}
+  .letter-document{
+    position:relative;z-index:5;padding:clamp(54px,7vh,74px) clamp(46px,8vw,82px) clamp(42px,6vh,64px) clamp(92px,20%,168px);
+  }
+  .appendix-head{
+    display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap;
+    padding-bottom:12px;margin:0 0 clamp(24px,4vh,38px);border-bottom:1px solid rgba(73,94,116,.24);
+  }
+  .appendix-title{
+    margin:0;font-family:var(--f-mono);font-size:clamp(.72rem,1.35vw,.82rem);font-weight:800;
+    letter-spacing:.09em;line-height:1.5;text-transform:uppercase;color:var(--ink);
+  }
+  .appendix-meta{
+    margin:0;font-family:var(--f-mono);font-size:clamp(.61rem,1.1vw,.69rem);font-weight:700;
+    letter-spacing:.08em;color:var(--muted);white-space:nowrap;
+  }
+  .letter-body{
+    font-family:"Songti SC","STSong","Hiragino Mincho ProN","Noto Serif SC",serif;
+    font-size:clamp(1rem,1.55vw,1.06rem);line-height:1.95;color:var(--ink-soft);
+  }
+  .letter-body p{margin:0 0 1.05em;text-wrap:pretty;}
+  .letter-body .opening{font-weight:700;color:var(--ink);}
+  .letter-body .approx{font-family:var(--f-mono);font-size:.86em;letter-spacing:-.02em;color:var(--muted);}
+  .letter-body .closing{margin-top:1.8em;color:var(--ink);}
+  .letter-body .signoff{margin:1.35em 0 0;font-family:var(--f-mono);font-size:.73em;font-weight:800;letter-spacing:.09em;color:var(--ink);}
+  .letter-body .quote{
+    margin:1.45em 0 0;font-family:var(--f-hand);font-size:clamp(1.28rem,2.5vw,1.62rem);
+    line-height:1.2;color:var(--accent);transform:rotate(-1deg);transform-origin:left center;
+  }
+  .letter-copy-rule{border:0;border-top:1px dashed rgba(73,94,116,.22);margin:0 28px;}
+
+  .comment-section{
+    position:relative;z-index:5;padding:clamp(30px,4.5vw,44px) clamp(28px,6vw,64px) clamp(44px,7vw,68px);
+  }
+  .comment-head{
+    display:flex;align-items:flex-start;justify-content:space-between;gap:18px;
+    padding-bottom:11px;border-bottom:1px solid rgba(73,94,116,.22);
+  }
+  .comment-title{
+    margin:0;font-family:var(--f-mono);font-size:.67rem;font-weight:800;letter-spacing:.12em;
+    line-height:1.5;text-transform:uppercase;color:var(--ink);
+  }
+  .comment-title strong{color:var(--accent);}
+  .comment-open{
+    margin:.4em 0 0;font-family:var(--f-mono);font-size:.56rem;font-weight:700;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  }
+  .comment-storage{
+    margin:.45em 0 0;font-family:var(--f-mono);font-size:.82rem;line-height:1.55;
+    letter-spacing:.025em;color:var(--ink-soft);
+  }
+  .comment-count{
+    font-family:var(--f-mono);font-size:.61rem;font-weight:700;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--muted);white-space:nowrap;
+  }
+  .comment-intro{
+    margin:1.15em 0 0;font-family:"Songti SC","STSong","Hiragino Mincho ProN","Noto Serif SC",serif;
+    font-size:.96rem;line-height:1.8;color:var(--ink-soft);
+  }
+  .comment-here{
+    display:inline-block;margin-left:.5em;font-family:var(--f-hand);font-size:1.48rem;
+    line-height:1;color:var(--accent);transform:rotate(-2deg);transform-origin:left center;
+  }
+  .comment-form{
+    display:grid;grid-template-columns:minmax(150px,.65fr) minmax(0,1.6fr);gap:14px 18px;
+    margin-top:18px;padding:clamp(16px,2.6vw,23px);border:1px dashed rgba(73,94,116,.28);
+    background:rgba(255,253,247,.42);
+  }
+  .comment-field{min-width:0;}
+  .comment-field label{
+    display:block;margin-bottom:7px;font-family:var(--f-mono);font-size:.6rem;font-weight:800;
+    letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+  }
+  .comment-field label span{font-weight:400;text-transform:none;letter-spacing:.02em;}
+  .comment-field input,.comment-field textarea{
+    width:100%;border:0;border-bottom:1px solid rgba(73,94,116,.34);border-radius:0;
+    background:transparent;color:var(--ink);outline:none;
+    font-family:"Songti SC","STSong","Hiragino Mincho ProN","Noto Serif SC",serif;
+    font-size:.92rem;line-height:1.65;
+  }
+  .comment-field input{padding:8px 0;}
+  .comment-field textarea{min-height:92px;padding:10px 12px;border:1px solid rgba(73,94,116,.25);resize:vertical;}
+  .comment-field input::placeholder,.comment-field textarea::placeholder{color:var(--faint);}
+  .comment-field input:focus,.comment-field textarea:focus{border-color:var(--accent);box-shadow:0 1px 0 var(--accent);}
+  .comment-actions{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:14px;}
+  .comment-hint{margin:0;font-family:var(--f-mono);font-size:.6rem;letter-spacing:.06em;color:var(--faint);}
+  .comment-submit{
+    flex:0 0 auto;min-height:42px;padding:0 18px;border:1px solid var(--ink);border-radius:2px;
+    background:var(--ink);color:var(--letter);font-family:var(--f-mono);font-size:.63rem;font-weight:800;
+    letter-spacing:.08em;text-transform:uppercase;cursor:pointer;
+    transition:background .2s ease,border-color .2s ease,transform .2s ease;
+  }
+  .comment-submit:hover{background:var(--accent);border-color:var(--accent);transform:translateY(-1px);}
+  .comment-status{grid-column:1/-1;min-height:1em;margin:0;font-family:var(--f-mono);font-size:.61rem;color:var(--accent-deep);}
+  .comment-status.is-error{color:#8f3346;}
+  .comment-wall{margin-top:22px;}
+  .comment-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+  .comment-note{
+    padding:15px 16px 14px;background:rgba(255,255,255,.42);border:1px solid rgba(73,94,116,.18);
+    box-shadow:0 8px 18px -17px rgba(31,36,48,.35);transform:rotate(var(--tilt,0deg));
+    animation:comment-in .34s cubic-bezier(.16,1,.3,1) both;
+  }
+  .comment-note:nth-child(3n+1){--tilt:-.35deg;}
+  .comment-note:nth-child(3n+2){--tilt:.42deg;}
+  .comment-note:nth-child(3n){--tilt:-.18deg;}
+  .comment-note-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;}
+  .comment-author{font-family:var(--f-mono);font-size:.59rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--accent-deep);}
+  .comment-date{font-family:var(--f-mono);font-size:.54rem;letter-spacing:.04em;color:var(--faint);white-space:nowrap;}
+  .comment-text{
+    margin:.65em 0 0;white-space:pre-wrap;overflow-wrap:anywhere;
+    font-family:"Songti SC","STSong","Hiragino Mincho ProN","Noto Serif SC",serif;
+    font-size:.88rem;line-height:1.72;color:var(--ink-soft);
+  }
+
+  @keyframes dialog-in{from{opacity:0}to{opacity:1}}
+  @keyframes close-reveal{from{opacity:0}to{opacity:1}}
+  @keyframes letter-crumple-unfold{
+    0%{
+      opacity:0;filter:blur(2px) contrast(1.08);
+      transform:translateY(88px) scale(.08) rotate(-20deg) rotateX(38deg) rotateY(24deg);
+      clip-path:polygon(36% 34%,44% 20%,57% 17%,67% 27%,72% 42%,69% 57%,61% 72%,49% 76%,37% 69%,27% 57%,25% 43%,29% 37%);
+    }
+    14%{
+      opacity:.96;filter:blur(1.1px) contrast(1.06);
+      transform:translateY(74px) scale(.17) rotate(-13deg) rotateX(24deg) rotateY(13deg);
+      clip-path:polygon(32% 27%,47% 14%,63% 19%,75% 33%,78% 51%,72% 68%,58% 80%,40% 77%,25% 64%,17% 48%,18% 35%,24% 27%);
+    }
+    38%{
+      opacity:1;filter:blur(.55px) contrast(1.04);
+      transform:translateY(44px) scale(.52) rotate(-5deg) rotateX(12deg) rotateY(-7deg);
+      clip-path:polygon(18% 16%,41% 6%,67% 9%,84% 22%,92% 43%,89% 65%,78% 82%,57% 91%,35% 88%,18% 76%,8% 55%,8% 31%);
+    }
+    66%{
+      opacity:1;filter:blur(.18px) contrast(1.02);
+      transform:translateY(10px) scale(.91) rotate(1.2deg) rotateX(-4deg) rotateY(3deg);
+      clip-path:polygon(6% 5%,29% 2%,52% 1%,76% 2%,96% 5%,98% 32%,99% 64%,96% 96%,72% 98%,48% 99%,22% 97%,4% 94%);
+    }
+    84%{
+      opacity:1;filter:blur(0) contrast(1);
+      transform:translateY(-4px) scale(1.018) rotate(-.45deg) rotateX(1.2deg) rotateY(-.8deg);
+      clip-path:polygon(1% 0,25% 0,50% 0,75% 0,100% 0,100% 33%,100% 66%,100% 100%,73% 100%,48% 100%,23% 100%,0 100%);
+    }
+    100%{
+      opacity:1;filter:blur(0) contrast(1);
+      transform:translateY(0) scale(1) rotate(0) rotateX(0) rotateY(0);
+      clip-path:polygon(0 0,25% 0,50% 0,75% 0,100% 0,100% 34%,100% 67%,100% 100%,74% 100%,49% 100%,24% 100%,0 100%);
+    }
+  }
+  @keyframes paper-ball-open{
+    0%{opacity:0;transform:translate(-50%,-38%) scale(.12) rotate(-22deg)}
+    10%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(-8deg)}
+    30%{opacity:1;transform:translate(-50%,-51%) scale(1.08) rotate(7deg)}
+    58%{opacity:.64;transform:translate(-50%,-50%) scale(1.7) rotate(-4deg)}
+    100%{opacity:0;transform:translate(-50%,-50%) scale(2.8) rotate(0)}
+  }
+  @keyframes sheet-crease-fade{
+    0%{opacity:.96}
+    42%{opacity:.72}
+    100%{opacity:0}
+  }
+  @keyframes comment-in{from{opacity:0;transform:rotate(var(--tilt,0deg)) translateY(8px)}to{opacity:1;transform:rotate(var(--tilt,0deg)) translateY(0)}}
+
+  @media (max-width:700px){
+    .wrap{padding:14px 14px 44px;}
+    .top{min-height:50px;}
+    .avatar{width:44px;height:44px;}
+    .back{font-size:.68rem;}
+    .meta-strip{grid-template-columns:1fr auto;font-size:.58rem;}
+    .meta-strip span:nth-child(2),.meta-strip span:nth-child(3),.meta-strip span:nth-child(4){display:none;}
+    .meta-strip span:last-child{font-size:.57rem;}
+    .letter-stage{min-height:clamp(430px,62vh,570px);margin-top:12px;}
+    .envelope-trigger{width:100%;transform:rotate(-.8deg);}
+    .sign{display:grid;grid-template-columns:1fr;gap:18px;margin-top:32px;}
+    .studio-mark{justify-self:end;width:auto;height:22.5px;}
+    .letter-dialog{width:calc(100vw - 18px);max-height:calc(100dvh - 18px);}
+    .letter{min-height:calc(100dvh - 18px);max-height:calc(100dvh - 18px);}
+    .letter::before{inset:7px;}
+    .letter-close{right:12px;top:12px;background:rgba(255,253,247,.94);}
+    .letter-document{padding:48px 20px 38px 74px;}
+    .appendix-head{gap:8px;margin-bottom:24px;}
+    .appendix-meta{white-space:normal;}
+    .letter-body{font-size:1rem;line-height:1.92;}
+    .letter-sticker-pink{left:-8%;top:43%;width:clamp(78px,24vw,98px);opacity:.8;}
+    .letter-sticker-white,.letter-sticker-bunny-main{display:none;}
+    .comment-form{grid-template-columns:1fr;padding:16px;}
+    .comment-actions{align-items:stretch;flex-direction:column;}
+    .comment-submit{width:100%;}
+    .comment-list{grid-template-columns:1fr;}
+  }
+  @media (max-width:430px){
+    .meta-strip{grid-template-columns:1fr auto;}
+    .comment-head{padding-right:48px;}
+    .meta-strip span:nth-child(3),.meta-strip span:nth-child(4){display:none;}
+    .meta-strip span:last-child{font-size:.58rem;}
+    .envelope-trigger{width:100%;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none !important;transition:none !important;scroll-behavior:auto !important;}
+  }
+  @media print{
+    body{background:#fff;}
+    .top,.meta-strip,.filmstrip,.letter-sticker-field,.letter-dialog{display:none !important;}
+    .wrap{max-width:none;padding:0;}
+    .letter-stage{min-height:0;margin-top:24px;}
+    .envelope-trigger{filter:none;width:480px;}
+    .sign{break-before:avoid;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="avatar" href="index.html" aria-label="Back to home"></a>
+    <a class="back" href="index.html">&larr; Back to home &middot; 返回首页</a>
+  </header>
+
+  <main>
+    <div class="meta-strip" aria-label="Manual issue information">
+      <span>Yujia Yang</span>
+      <span>///</span>
+      <span>Owner&rsquo;s Manual &middot; 2026</span>
+      <span>///</span>
+      <span>Chapter 04 / 04</span>
+    </div>
+
+    <h1 class="sr-only" id="page-title">Troubleshooting FAQ</h1>
+
+    <section class="letter-stage" aria-label="A sealed letter">
+      <button class="envelope-trigger" id="open-letter" type="button" aria-haspopup="dialog" aria-controls="letter-dialog">
+        <span class="envelope" aria-hidden="true">
+          <span class="envelope-flap"></span>
+          <img class="envelope-title-art" src="assets/faq-letter-title.png" alt="">
+          <span class="envelope-pocket"></span>
+          <span class="filmstrip"></span>
+          <span class="postage">YJ<br>2026</span>
+          <span class="seal">YJ</span>
+          <span class="address"><strong>For you</strong>Open when curious.</span>
+        </span>
+        <span class="sr-only">打开信封</span>
+      </button>
+    </section>
+  </main>
+
+  <footer class="sign">
+    <div class="sign-copy">
+      <p class="sign-title">Yujia.Y 个人使用说明书<span class="sign-sep">｜</span><span class="sign-ver">V1.0</span></p>
+      <p class="sign-sub">这份手册用于快速了解 Dr. YJ.Y。记录偏好，减少误会，友好相处。</p>
+    </div>
+    <img class="studio-mark" src="assets/mirror-studio-logo.png" alt="Mirror.Studio">
+  </footer>
+</div>
+
+<dialog class="letter-dialog" id="letter-dialog" aria-labelledby="letter-title">
+  <button class="letter-close" id="close-letter" type="button" aria-label="Close letter">&times;</button>
+  <div class="paper-ball" id="paper-ball" aria-hidden="true">
+    <span class="ball-shard s1"></span><span class="ball-shard s2"></span>
+    <span class="ball-shard s3"></span><span class="ball-shard s4"></span>
+    <span class="ball-shard s5"></span><span class="ball-crease c1"></span>
+    <span class="ball-crease c2"></span>
+  </div>
+  <article class="letter" id="letter-sheet">
+    <span class="letter-sheet-shade" aria-hidden="true"></span>
+    <div class="letter-sticker-field" aria-hidden="true">
+      <img class="letter-sticker letter-sticker-pink" src="assets/sticker-pink-lily.webp" alt="">
+      <img class="letter-sticker letter-sticker-white" src="assets/sticker-white-lily.webp" alt="">
+      <img class="letter-sticker letter-sticker-bunny-main" src="assets/sticker-bunny-main.webp" alt="">
+    </div>
+    <div class="letter-document">
+      <!-- LETTER CONTENT: replace this section when the final appendix copy changes. -->
+      <header class="appendix-head">
+        <h2 class="appendix-title" id="letter-title">APPENDIX / 维护日志:</h2>
+        <p class="appendix-meta">V1.0 Nov. 2026</p>
+      </header>
+      <div class="letter-body">
+        <p class="opening">本手书整理自 100 顿饭<span class="approx">(Approximately)</span>观察者视角</p>
+        <p>记录的是偏好、相处参数，不是完整传记定论。</p>
+        <p>所有条目均欢迎本人及挚爱亲友们随时批注、填补、修订。</p>
+        <p>本手书并不用于定义归属者。</p>
+        <p>最终解释权归 DR. YUJIA.YANG</p>
+        <p class="closing">祝愿归属者：怀光徐行，渐赴嘉程。</p>
+        <p class="quote">*And it was enchanting to meet you</p>
+      </div>
+    </div>
+
+    <hr class="letter-copy-rule">
+
+    <section class="comment-section" aria-labelledby="comments-title">
+      <div class="comment-head">
+        <div>
+          <h3 class="comment-title" id="comments-title">Comments <strong>/ 留言</strong></h3>
+          <p class="comment-open">Open note &middot; 开放留言</p>
+          <p class="comment-storage" id="comment-storage">Saved in this browser &middot; 留言仅保存在当前浏览器</p>
+        </div>
+        <span class="comment-count" id="comment-count" aria-live="polite">0 notes</span>
+      </div>
+      <p class="comment-intro">如有任何想传递的话 <span class="comment-here">Comment HERE</span></p>
+
+      <form class="comment-form" id="comment-form" novalidate>
+        <div class="comment-field">
+          <label for="comment-name">Name / 昵称 <span>(optional)</span></label>
+          <input id="comment-name" name="name" type="text" maxlength="24" autocomplete="nickname" placeholder="Anonymous · 匿名">
+        </div>
+        <div class="comment-field">
+          <label for="comment-text">Message / 想说的话</label>
+          <textarea id="comment-text" name="message" maxlength="280" required placeholder="写下一句想留在这里的话…" aria-describedby="comment-storage comment-status comment-counter"></textarea>
+        </div>
+        <div class="comment-actions">
+          <p class="comment-hint" id="comment-counter">0 / 280</p>
+          <button class="comment-submit" type="submit">放进信末</button>
+        </div>
+        <p class="comment-status" id="comment-status" role="status" aria-live="polite"></p>
+      </form>
+
+      <div class="comment-wall">
+        <div class="comment-list" id="comment-list"></div>
+      </div>
+    </section>
+  </article>
+</dialog>
+
+<script>
+  (function () {
+    var dialog = document.getElementById('letter-dialog');
+    var openButton = document.getElementById('open-letter');
+    var closeButton = document.getElementById('close-letter');
+    var letter = document.getElementById('letter-sheet');
+    var paperBall = document.getElementById('paper-ball');
+    var unfoldTimer;
+    var openingTimer;
+    var commentForm = document.getElementById('comment-form');
+    var commentName = document.getElementById('comment-name');
+    var commentText = document.getElementById('comment-text');
+    var commentCounter = document.getElementById('comment-counter');
+    var commentStatus = document.getElementById('comment-status');
+    var commentList = document.getElementById('comment-list');
+    var commentCount = document.getElementById('comment-count');
+    var commentStorageKey = 'yujia-yang-manual-comments-v1';
+    var comments = loadComments();
+
+    function loadComments() {
+      try {
+        var saved = JSON.parse(window.localStorage.getItem(commentStorageKey) || '[]');
+        if (!Array.isArray(saved)) return [];
+        return saved.filter(function (item) {
+          return item && typeof item.text === 'string' && item.text.trim();
+        }).map(function (item) {
+          var created = new Date(item.createdAt);
+          return {
+            id: typeof item.id === 'string' ? item.id.slice(0, 40) : '',
+            name: typeof item.name === 'string' ? item.name.trim().slice(0, 24) : '',
+            text: item.text.trim().slice(0, 280),
+            createdAt: isNaN(created.getTime()) ? new Date().toISOString() : created.toISOString()
+          };
+        }).slice(0, 120);
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function persistComments(items) {
+      try {
+        window.localStorage.setItem(commentStorageKey, JSON.stringify(items));
+        return true;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    function formatCommentDate(value) {
+      var date = new Date(value);
+      if (isNaN(date.getTime())) return '';
+      try {
+        return new Intl.DateTimeFormat('zh-CN', { month: 'short', day: 'numeric' }).format(date);
+      } catch (error) {
+        return date.toLocaleDateString();
+      }
+    }
+
+    function renderComments() {
+      commentList.textContent = '';
+      var ordered = comments.slice().sort(function (a, b) {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      });
+
+      ordered.forEach(function (item) {
+        var note = document.createElement('article');
+        note.className = 'comment-note';
+
+        var head = document.createElement('div');
+        head.className = 'comment-note-head';
+
+        var author = document.createElement('span');
+        author.className = 'comment-author';
+        author.textContent = item.name && item.name.trim() ? item.name.trim() : 'Anonymous · 匿名';
+
+        var date = document.createElement('time');
+        date.className = 'comment-date';
+        date.dateTime = item.createdAt || '';
+        date.textContent = formatCommentDate(item.createdAt);
+
+        var text = document.createElement('p');
+        text.className = 'comment-text';
+        text.textContent = item.text;
+
+        head.appendChild(author);
+        head.appendChild(date);
+        note.appendChild(head);
+        note.appendChild(text);
+        commentList.appendChild(note);
+      });
+
+      commentCount.textContent = ordered.length === 1 ? '1 note' : ordered.length + ' notes';
+    }
+
+    function updateCommentCounter() {
+      commentCounter.textContent = commentText.value.length + ' / 280';
+    }
+
+    renderComments();
+
+    function revealLetter() {
+      if (typeof dialog.showModal === 'function') {
+        dialog.showModal();
+      } else {
+        dialog.setAttribute('open', '');
+      }
+      document.body.classList.add('is-letter-open');
+      letter.scrollTop = 0;
+      letter.classList.remove('is-unfolding');
+      paperBall.classList.remove('is-unfolding');
+      void letter.offsetWidth;
+      letter.classList.add('is-unfolding');
+      paperBall.classList.add('is-unfolding');
+      clearTimeout(unfoldTimer);
+      unfoldTimer = setTimeout(function () {
+        letter.classList.remove('is-unfolding');
+        paperBall.classList.remove('is-unfolding');
+      }, 1780);
+      closeButton.focus({ preventScroll: true });
+    }
+
+    function openLetter(event) {
+      event.preventDefault();
+      if (dialog.open || openButton.classList.contains('is-opening')) return;
+      openButton.classList.add('is-opening');
+      clearTimeout(openingTimer);
+      var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      openingTimer = setTimeout(revealLetter, reduceMotion ? 0 : 300);
+    }
+
+    function closeLetter() {
+      if (typeof dialog.close === 'function') {
+        dialog.close();
+      } else {
+        dialog.removeAttribute('open');
+      }
+      document.body.classList.remove('is-letter-open');
+      clearTimeout(openingTimer);
+      clearTimeout(unfoldTimer);
+      openButton.classList.remove('is-opening');
+      letter.scrollTop = 0;
+      letter.classList.remove('is-unfolding');
+      paperBall.classList.remove('is-unfolding');
+      openButton.focus();
+    }
+
+    openButton.addEventListener('click', openLetter);
+    closeButton.addEventListener('click', closeLetter);
+
+    dialog.addEventListener('cancel', function (event) {
+      event.preventDefault();
+      closeLetter();
+    });
+
+    dialog.addEventListener('click', function (event) {
+      if (event.target === dialog) closeLetter();
+    });
+
+    commentText.addEventListener('input', function () {
+      updateCommentCounter();
+      commentStatus.textContent = '';
+      commentStatus.classList.remove('is-error');
+    });
+
+    commentForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+      var message = commentText.value.trim();
+      if (!message) {
+        commentStatus.textContent = '写下一句话，再放进信末。';
+        commentStatus.classList.add('is-error');
+        commentText.focus();
+        return;
+      }
+
+      var nextComments = [{
+        id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+        name: commentName.value.trim().slice(0, 24),
+        text: message.slice(0, 280),
+        createdAt: new Date().toISOString()
+      }].concat(comments).slice(0, 120);
+
+      if (!persistComments(nextComments)) {
+        commentStatus.textContent = '留言未能保存，请检查浏览器存储空间后重试。';
+        commentStatus.classList.add('is-error');
+        commentText.focus();
+        return;
+      }
+
+      comments = nextComments;
+      renderComments();
+      commentForm.reset();
+      updateCommentCounter();
+      commentStatus.classList.remove('is-error');
+      commentStatus.textContent = '留言已保存在当前浏览器。';
+    });
+  }());
+</script>
+</body>
+</html>

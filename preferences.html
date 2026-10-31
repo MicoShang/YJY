@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preferences · 偏好设置 · Yujia Yang 使用手册</title>
+<meta name="description" content="Likes, habits and hard no's, all recorded in one place.">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#f6f4f1">
+<link rel="icon" type="image/jpeg" href="assets/doc-yang-avatar-256.jpg">
+<style>
+@font-face{font-family:'Archivo';font-style:normal;font-weight:400 900;font-display:swap;src:url("assets/fonts/archivo-latin.woff2") format('woff2');}
+@font-face{font-family:'Caveat';font-style:normal;font-weight:400 700;font-display:swap;src:url("assets/fonts/caveat-latin.woff2") format('woff2');}
+  :root{
+    --bg:#f4f1ec;
+    --paper:#fffdf7;
+    --paper-soft:#faf5eb;
+    --ink:#1a1714;
+    --ink-soft:#4c453e;
+    --muted:#71675d;
+    --faint:#8b8075;
+    --accent:#bd3d59;
+    --accent-deep:#8e2641;
+    --folder:#4e5c96;
+    --folder-deep:#3e4978;
+    --line:rgba(26,23,20,.13);
+    --line-strong:rgba(26,23,20,.22);
+    --f-display:'Archivo',"PingFang SC","Hiragino Sans GB",system-ui,-apple-system,sans-serif;
+    --f-mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"PingFang SC","Hiragino Sans GB",monospace;
+    --f-hand:'Caveat','Segoe Script',cursive;
+    --avatar:url("assets/doc-yang-avatar-256.jpg");
+    --book-shadow:0 1px 2px rgba(26,23,20,.08),0 26px 64px -48px rgba(26,23,20,.62),0 4px 18px -12px rgba(26,23,20,.16);
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  ::selection{background:rgba(189,61,89,.18);}
+  body{
+    margin:0;
+    background:
+      radial-gradient(70% 44% at 50% 0%,rgba(255,255,255,.58),rgba(255,255,255,0) 72%),
+      var(--bg);
+    color:var(--ink);
+    font-family:var(--f-display);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    text-rendering:optimizeLegibility;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+  a{-webkit-tap-highlight-color:transparent;}
+  button{-webkit-tap-highlight-color:transparent;}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:4px;}
+  .wrap{max-width:1220px;margin:0 auto;padding:24px clamp(16px,3.4vw,38px) 64px;}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:56px;}
+  .avatar{
+    width:52px;height:52px;border-radius:50%;flex:0 0 auto;
+    background:#f4f2ef var(--avatar) 50% 20%/cover no-repeat;
+    box-shadow:0 10px 22px -12px rgba(26,23,20,.55),inset 0 0 0 1px rgba(26,23,20,.10);
+    transition:transform .22s ease;
+  }
+  .avatar:hover{transform:translateY(-2px);}
+  .back{
+    font-family:var(--f-mono);font-size:.8rem;font-weight:600;letter-spacing:.02em;
+    color:var(--muted);text-decoration:none;border-bottom:1px solid transparent;padding-bottom:2px;
+    transition:color .2s ease,border-color .2s ease;
+  }
+  .back:hover{color:var(--accent);border-bottom-color:rgba(189,61,89,.5);}
+  .back-clip{
+    position:relative;padding:7px 22px 7px 12px;
+    background:rgba(255,253,247,.78);border:1px solid var(--line);border-radius:2px;
+    box-shadow:0 10px 20px -18px rgba(26,23,20,.5);
+    transform:rotate(.55deg);
+  }
+  .top-paperclip{
+    position:absolute;right:-10px;top:-19px;width:24px;height:47px;
+    color:#8d867c;transform:rotate(12deg);transform-origin:50% 14%;
+    filter:drop-shadow(0 2px 2px rgba(26,23,20,.16));
+    animation:clip-in .46s .18s cubic-bezier(.2,.8,.2,1) both;
+  }
+
+  .book-wrap{position:relative;margin-top:clamp(18px,3vw,34px);padding-top:26px;}
+  .folder-back{
+    position:absolute;z-index:0;left:10px;right:-10px;top:34px;bottom:-12px;
+    border-radius:10px;
+    background:
+      linear-gradient(145deg,rgba(255,255,255,.22),rgba(255,255,255,0) 42%),
+      linear-gradient(145deg,#e9dfcc,#dbcdb4);
+    border:1px solid rgba(110,88,57,.16);
+    box-shadow:0 24px 44px -38px rgba(87,65,39,.62),inset 0 1px 0 rgba(255,255,255,.55);
+    animation:book-in .52s .05s both;
+  }
+  .binding{
+    position:absolute;top:0;left:7%;right:7%;z-index:20;
+    display:flex;justify-content:space-between;pointer-events:none;
+  }
+  .binding .ring{
+    position:relative;width:52px;height:28px;border-radius:50%;
+    border:6px solid #99938a;
+    background:linear-gradient(180deg,rgba(255,255,255,.78),rgba(255,255,255,0) 45%,rgba(86,80,71,.14));
+    box-shadow:inset 0 2px 2px rgba(255,255,255,.86),0 5px 7px -5px rgba(26,23,20,.55);
+    transform-origin:50% 0;
+    animation:ring-in .48s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .binding .ring::before{
+    content:"";position:absolute;inset:3px 7px;border-radius:50%;
+    border:2px solid rgba(255,255,255,.55);border-bottom-color:rgba(80,74,66,.20);
+  }
+  .binding .ring::after{
+    content:"";position:absolute;left:50%;bottom:-11px;width:7px;height:14px;border-radius:99px;
+    background:linear-gradient(90deg,#837d73,#d1ccc2 48%,#8e887e);
+    transform:translateX(-50%);box-shadow:0 3px 5px -4px rgba(26,23,20,.7);
+  }
+  .binding .ring:nth-child(2){animation-delay:.045s;}
+  .binding .ring:nth-child(3){animation-delay:.09s;}
+  .binding .ring:nth-child(4){animation-delay:.135s;}
+  .binding .ring:nth-child(5){animation-delay:.18s;}
+
+  .book{
+    position:relative;display:grid;grid-template-columns:minmax(260px,30%) minmax(0,1fr) 108px;
+    background:
+      radial-gradient(circle at 1px 1px,rgba(26,23,20,.036) 1px,transparent 1.4px),
+      linear-gradient(145deg,#fffdf8 0%,#fffdf7 42%,#fbf7ee 100%);
+    background-size:8px 8px,100% 100%;
+    border:1px solid var(--line);
+    border-radius:6px;
+    box-shadow:var(--book-shadow);
+    overflow:visible;
+    isolation:isolate;
+    z-index:1;
+    animation:book-in .52s ease both;
+  }
+  .book::before{
+    content:"";position:absolute;inset:0;pointer-events:none;z-index:-1;
+    background:linear-gradient(90deg,rgba(26,23,20,.018),rgba(26,23,20,0) 21%,rgba(26,23,20,0) 79%,rgba(26,23,20,.025));
+  }
+  .index-page{
+    position:relative;display:flex;flex-direction:column;min-width:0;
+    padding:clamp(50px,4.4vw,62px) clamp(24px,2.6vw,36px) 28px;
+    border-right:1px solid var(--line-strong);
+    border-radius:6px 0 0 6px;
+    background:linear-gradient(90deg,rgba(255,253,247,.78),rgba(250,245,235,.64));
+  }
+  .index-page::after{
+    content:"";position:absolute;right:-13px;top:0;bottom:0;width:13px;pointer-events:none;
+    background:linear-gradient(90deg,rgba(26,23,20,.07),rgba(26,23,20,0));
+    opacity:.55;
+  }
+  .kicker{
+    margin:0;font-family:var(--f-mono);font-size:.66rem;font-weight:700;
+    letter-spacing:.15em;text-transform:uppercase;color:var(--accent);
+  }
+  .title-sticky{
+    position:relative;margin:0 0 30px;padding:23px 22px 20px;
+    background:linear-gradient(145deg,#e9eef7,#dbe5f1);
+    border:1px solid rgba(78,92,150,.15);border-radius:3px;
+    box-shadow:0 18px 28px -26px rgba(54,68,114,.55);
+    transform:rotate(-1.2deg);
+    transition:transform .25s ease,box-shadow .25s ease;
+    animation:title-note-in .56s .12s cubic-bezier(.2,.8,.2,1) backwards;
+  }
+  .title-sticky::before{
+    content:"";position:absolute;z-index:2;left:-15px;top:-10px;width:116px;height:25px;
+    transform:rotate(-12deg);
+    background:rgba(221,211,179,.66);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.3);
+    border-left:1px dashed rgba(126,111,73,.2);border-right:1px dashed rgba(126,111,73,.2);
+  }
+  .title-sticky:hover{transform:rotate(-.5deg) translateY(-2px);box-shadow:0 22px 32px -27px rgba(54,68,114,.66);}
+  .title-kicker{
+    margin:0;font-family:var(--f-hand);font-size:1.18rem;line-height:1;
+    letter-spacing:.02em;color:#4e5c96;
+  }
+  .title-hand{
+    margin:6px 0 0;font-family:var(--f-hand);font-size:clamp(2.1rem,3vw,2.8rem);
+    font-weight:700;line-height:.86;letter-spacing:-.01em;color:#2f3a68;white-space:nowrap;
+  }
+  .title-zh{
+    margin:12px 0 0;font-size:.74rem;font-weight:700;letter-spacing:.12em;color:#5f6a8f;
+  }
+  .title-lede{
+    margin:13px 0 0;font-family:var(--f-hand);font-size:clamp(1rem,1.6vw,1.23rem);line-height:1.08;
+    color:#485477;
+  }
+  .index-card{
+    position:relative;margin-top:0;padding:17px 16px 14px;
+    background:rgba(255,253,247,.94);border:1px solid var(--line);border-radius:4px;
+    box-shadow:0 14px 26px -24px rgba(26,23,20,.55);
+    transform:rotate(-.45deg);
+    animation:card-in .55s .16s cubic-bezier(.2,.8,.2,1) backwards;
+  }
+  .index-card-head{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding-bottom:10px;border-bottom:1px solid var(--line);
+  }
+  .mini-index{margin-top:0;border-top:0;}
+  .mini-index a{
+    display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:12px;align-items:center;
+    padding:14px 0;border-bottom:1px solid var(--line);color:var(--ink);text-decoration:none;
+    transition:color .2s ease,transform .2s ease;
+  }
+  .mini-index a:hover{color:var(--accent);transform:translateX(2px);}
+  .mini-index .idx{font-family:var(--f-mono);font-size:.68rem;font-weight:700;color:var(--accent);}
+  .mini-index strong{display:block;font-size:.9rem;font-weight:800;letter-spacing:-.01em;}
+  .mini-index small{display:block;margin-top:3px;font-size:.72rem;font-weight:500;color:var(--muted);letter-spacing:.02em;}
+  .mini-index .arrow{font-family:var(--f-mono);font-size:.9rem;color:var(--faint);transition:transform .22s ease,color .22s ease;}
+  .mini-index a:hover .arrow{transform:translateX(4px);color:var(--accent);}
+  .index-note{
+    margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line);
+    font-family:var(--f-hand);font-size:1.12rem;line-height:1.02;color:var(--accent-deep);
+  }
+  .index-note .keep-line{display:block;}
+  .folio{margin:auto 0 0;padding-top:42px;font-family:var(--f-mono);font-size:.68rem;font-weight:700;letter-spacing:.15em;color:var(--faint);}
+
+  .content-page{position:relative;min-width:0;padding:0 clamp(24px,4vw,48px) clamp(38px,5vw,58px);perspective:1400px;}
+  .tab-rail{
+    position:relative;min-width:0;border-left:1px solid var(--line-strong);border-radius:0 6px 6px 0;
+    background:linear-gradient(180deg,rgba(78,92,150,.055),rgba(78,92,150,.015) 42%,rgba(26,23,20,.018));
+  }
+  .tab-rail-inner{position:sticky;top:18px;display:flex;flex-direction:column;gap:17px;padding:24px 10px 28px;}
+  .rail-head{display:flex;flex-direction:column;gap:4px;padding:0 4px 13px;border-bottom:1px solid var(--line);}
+  .rail-head b{font-family:var(--f-mono);font-size:1.6rem;font-weight:700;line-height:.8;letter-spacing:-.08em;color:var(--folder);}
+  .rail-head span{font-family:var(--f-mono);font-size:.54rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+  .tabs{display:flex;flex-direction:column;gap:8px;}
+  .tab{
+    appearance:none;width:100%;min-width:0;padding:12px 9px 12px 12px;
+    display:flex;flex-direction:column;align-items:flex-start;gap:4px;
+    border:1px solid var(--line);border-radius:10px 0 0 10px;
+    background:rgba(255,253,247,.58);color:var(--muted);font-family:var(--f-display);
+    cursor:pointer;text-align:left;
+    box-shadow:-4px 4px 12px -14px rgba(26,23,20,.5);
+    transition:background .2s ease,color .2s ease,transform .2s ease,box-shadow .2s ease;
+  }
+  .tab strong{font-size:.63rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;line-height:1;}
+  .tab span{font-size:.64rem;font-weight:600;letter-spacing:.05em;line-height:1.2;}
+  .tab:hover{background:rgba(189,61,89,.065);color:var(--ink);}
+  .tab[aria-selected="true"]{
+    background:var(--paper);border-color:var(--line-strong);color:var(--ink);
+    box-shadow:-8px 2px 18px -14px rgba(26,23,20,.54);transform:translateX(-6px);
+  }
+  .tab[aria-selected="true"] strong{color:var(--accent);}
+  .panel{padding-top:clamp(32px,4.4vw,48px);}
+  .panel[hidden]{display:none;}
+  .panel.is-active{animation:sheet-in .44s cubic-bezier(.2,.8,.2,1) both;}
+  .panel.is-active :is(.fuel-item,.place,.core-item,.skill,.rule){
+    animation:item-in .36s cubic-bezier(.2,.8,.2,1) both;
+    animation-delay:calc(var(--i,0) * 34ms);
+  }
+  .fuel-item:nth-child(1),.place:nth-child(1),.core-item:nth-child(1),.skill:nth-child(1),.rule:nth-child(1){--i:0;}
+  .fuel-item:nth-child(2),.place:nth-child(2),.core-item:nth-child(2),.skill:nth-child(2),.rule:nth-child(2){--i:1;}
+  .fuel-item:nth-child(3),.place:nth-child(3),.core-item:nth-child(3),.rule:nth-child(3){--i:2;}
+  .fuel-item:nth-child(4),.place:nth-child(4),.core-item:nth-child(4),.rule:nth-child(4){--i:3;}
+  .fuel-item:nth-child(5),.place:nth-child(5),.rule:nth-child(5){--i:4;}
+  .fuel-item:nth-child(6),.rule:nth-child(6){--i:5;}
+  @keyframes book-in{from{opacity:0;}to{opacity:1;}}
+  @keyframes ring-in{from{opacity:0;transform:translateY(-15px) scale(.88);}to{opacity:1;transform:translateY(0) scale(1);}}
+  @keyframes card-in{from{opacity:0;transform:translateY(12px) rotate(-1.2deg);}to{opacity:1;transform:translateY(0) rotate(-.45deg);}}
+  @keyframes title-note-in{from{opacity:0;transform:translateY(12px) rotate(-2.6deg);}to{opacity:1;transform:translateY(0) rotate(-1.2deg);}}
+  @keyframes clip-in{from{opacity:0;transform:translateY(-8px) rotate(24deg);}to{opacity:1;transform:translateY(0) rotate(12deg);}}
+  @keyframes item-in{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes sheet-in{
+    from{opacity:0;transform:translate3d(12px,7px,0) rotateY(-2deg);}
+    to{opacity:1;transform:translate3d(0,0,0) rotateY(0);}
+  }
+  .panel-head{
+    display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:end;
+    padding-bottom:22px;border-bottom:1px solid var(--line-strong);
+  }
+  .panel-head h2{margin:8px 0 0;font-size:clamp(2.25rem,4.5vw,4.2rem);font-weight:900;line-height:.92;letter-spacing:-.055em;}
+  .panel-head p{margin:14px 0 0;max-width:46ch;font-size:.9rem;line-height:1.7;color:var(--ink-soft);}
+  .panel-tag{margin:0;padding-bottom:.3em;font-family:var(--f-mono);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);text-align:right;line-height:1.5;}
+  .subsection{margin-top:34px;}
+  .subhead{display:flex;align-items:baseline;gap:12px;padding-bottom:10px;border-bottom:1px solid var(--line);}
+  .subhead .num{font-family:var(--f-mono);font-size:.68rem;font-weight:700;color:var(--accent);}
+  .subhead h3{margin:0;font-size:1rem;font-weight:850;letter-spacing:-.015em;}
+  .subhead p{margin:0 0 0 auto;font-size:.7rem;font-weight:600;color:var(--muted);letter-spacing:.02em;text-align:right;}
+
+  .fuel-list{display:grid;grid-template-columns:1fr 1fr;gap:0 28px;}
+  .fuel-item{display:grid;grid-template-columns:24px minmax(0,1fr);gap:10px;padding:15px 0;border-bottom:1px solid var(--line);}
+  .fuel-item .n{padding-top:.25em;font-family:var(--f-mono);font-size:.62rem;font-weight:700;color:var(--accent);}
+  .fuel-item h4{margin:0;font-size:.94rem;font-weight:800;letter-spacing:-.01em;line-height:1.35;}
+  .fuel-item p{margin:.38em 0 0;font-size:.84rem;line-height:1.68;color:var(--ink-soft);}
+  .places{display:grid;grid-template-columns:1fr 1fr;gap:0 28px;}
+  .place{padding:16px 0 15px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px;align-items:baseline;}
+  .place h4{margin:0;font-size:.94rem;font-weight:800;letter-spacing:-.01em;}
+  .place .tag{font-family:var(--f-mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+  .place p{grid-column:1 / -1;margin:0;font-size:.84rem;line-height:1.62;color:var(--ink-soft);}
+  .sushi-line{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;padding:16px 0 0;font-size:.88rem;line-height:1.7;color:var(--ink-soft);}
+  .sushi-line strong{color:var(--ink);}
+
+  .stamp-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px;}
+  .error-stamp{position:relative;min-height:200px;padding:24px;border-radius:5px;overflow:hidden;display:flex;flex-direction:column;}
+  .error-stamp.is-hard{background:linear-gradient(145deg,#9b2944,#7e1f37);color:#fffaf7;box-shadow:0 16px 26px -24px rgba(94,24,42,.9);}
+  .error-stamp.is-denied{background:rgba(189,61,89,.035);border:1.5px dashed rgba(142,38,65,.64);color:var(--accent-deep);}
+  .error-stamp::after{content:"";position:absolute;right:-30px;bottom:-42px;width:150px;height:150px;border:1px solid currentColor;border-radius:50%;opacity:.14;pointer-events:none;}
+  .error-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;}
+  .error-code{font-family:var(--f-mono);font-size:clamp(2.8rem,4vw,4rem);font-weight:700;line-height:.9;letter-spacing:-.08em;}
+  .error-label{font-family:var(--f-mono);font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;text-align:right;line-height:1.45;}
+  .error-stamp p{margin:18px 0 0;font-size:.8rem;line-height:1.7;opacity:.82;}
+  .error-items{display:flex;flex-wrap:wrap;gap:7px;margin-top:auto;padding-top:22px;}
+  .error-items span{display:inline-block;padding:5px 9px;border:1px solid currentColor;border-radius:999px;font-size:.72rem;font-weight:650;line-height:1.2;opacity:.94;}
+
+  .rule-list{list-style:none;margin:0;padding:0;}
+  .rule{display:grid;grid-template-columns:48px minmax(0,1fr);gap:15px;padding:18px 0;border-bottom:1px solid var(--line);align-items:start;}
+  .rule-num{padding-top:.18em;font-family:var(--f-mono);font-size:.65rem;font-weight:700;color:var(--accent);}
+  .rule p{margin:0;font-size:.9rem;line-height:1.8;color:var(--ink-soft);}
+
+  .core-list{display:grid;grid-template-columns:1fr 1fr;gap:0 30px;}
+  .core-item{position:relative;padding:22px 0;border-bottom:1px solid var(--line);}
+  .core-code{display:flex;align-items:baseline;gap:9px;font-family:var(--f-mono);font-size:.61rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+  .core-code b{font-size:.88rem;color:var(--accent);}
+  .core-item h4{margin:13px 0 0;font-size:1.12rem;font-weight:850;letter-spacing:-.025em;}
+  .core-item p{margin:.55em 0 0;font-size:.86rem;line-height:1.78;color:var(--ink-soft);}
+  .core-item strong{color:var(--ink);}
+
+  .skills{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:24px;}
+  .skill{position:relative;padding:21px 21px 23px;border:1px solid var(--line);border-radius:5px;background:rgba(255,255,255,.38);}
+  .skill::before{content:"";position:absolute;right:14px;top:0;width:20px;height:20px;background:linear-gradient(225deg,rgba(26,23,20,.08) 0 49%,transparent 50%);}
+  .skill-top{display:flex;justify-content:space-between;gap:12px;padding-bottom:13px;border-bottom:1px solid var(--line);}
+  .skill-code{font-family:var(--f-mono);font-size:.6rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);}
+  .skill-type{font-family:var(--f-mono);font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+  .skill h3{margin:14px 0 0;font-size:1.04rem;font-weight:850;letter-spacing:-.015em;}
+  .skill dl{display:grid;grid-template-columns:66px minmax(0,1fr);gap:10px 12px;margin:17px 0 0;}
+  .skill dt{font-family:var(--f-mono);font-size:.58rem;font-weight:700;letter-spacing:.06em;color:var(--muted);padding-top:.26em;}
+  .skill dd{margin:0;font-size:.84rem;line-height:1.7;color:var(--ink-soft);}
+  .skill dd.is-empty{color:var(--faint);}
+
+  @media (max-width:860px){
+    .book-wrap{padding-top:20px;}
+    .folder-back{left:6px;right:-6px;top:28px;bottom:-8px;}
+    .binding{left:5%;right:5%;}
+    .binding .ring{width:42px;height:24px;border-width:5px;}
+    .binding .ring::after{bottom:-9px;height:12px;}
+    .book{display:flex;flex-direction:column;}
+    .index-page{order:1;}
+    .tab-rail{order:2;position:sticky;top:0;z-index:12;border-left:0;border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line);border-radius:0;background:rgba(250,247,240,.96);backdrop-filter:blur(8px);}
+    .tab-rail-inner{position:static;display:block;padding:10px 14px 0;}
+    .rail-head{display:none;}
+    .tabs{flex-direction:row;gap:4px;overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain;}
+    .tabs::-webkit-scrollbar{display:none;}
+    .tab{width:auto;min-width:86px;padding:10px 12px 12px;border-bottom:0;border-radius:8px 8px 0 0;box-shadow:none;transform:none;}
+    .tab[aria-selected="true"]{transform:translateY(1px);box-shadow:0 -5px 14px -14px rgba(26,23,20,.5);}
+    .content-page{order:3;}
+    .index-page{border-right:0;border-bottom:1px solid var(--line-strong);border-radius:6px 6px 0 0;padding:52px clamp(20px,5vw,32px) 26px;}
+    .index-page::after{display:none;}
+    .mini-index{display:grid;grid-template-columns:1fr 1fr;gap:0 20px;}
+    .content-page{padding:0 clamp(20px,5vw,32px) 38px;}
+    .fuel-list,.places,.core-list,.skills,.stamp-grid{grid-template-columns:1fr;}
+    .fuel-list,.places,.core-list,.skills{gap:0;}
+    .panel-head{grid-template-columns:1fr;}
+    .panel-tag{text-align:left;padding:0;}
+  }
+  @media (max-width:520px){
+    .wrap{padding:14px 12px 42px;}
+    .book-wrap{margin-top:14px;padding-top:16px;}
+    .folder-back{left:4px;right:-4px;top:24px;bottom:-6px;}
+    .back-clip{padding:6px 18px 6px 10px;}
+    .top-paperclip{right:-8px;top:-16px;width:21px;height:42px;}
+    .title-sticky{padding:20px 18px 17px;}
+    .title-hand{font-size:2.55rem;}
+    .title-lede{font-size:1.15rem;}
+    .binding{left:2.5%;right:2.5%;}
+    .binding .ring{width:31px;height:19px;border-width:4px;}
+    .binding .ring::after{bottom:-7px;height:10px;width:5px;}
+    .top{min-height:48px;}
+    .avatar{width:44px;height:44px;}
+    .back{font-size:.72rem;}
+    .mini-index{grid-template-columns:1fr;}
+    .panel-head h2{font-size:clamp(2.1rem,12vw,3.3rem);}
+    .subhead{flex-wrap:wrap;}
+    .subhead p{width:100%;text-align:left;margin-left:0;}
+    .rule{grid-template-columns:36px minmax(0,1fr);gap:10px;}
+    .skill dl{grid-template-columns:58px minmax(0,1fr);}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none !important;transition:none !important;scroll-behavior:auto !important;}
+  }
+  @media print{
+    body{background:#fff;}
+    .wrap{max-width:none;padding:0;}
+    .top,.tab-rail,.binding,.top-paperclip,.folder-back{display:none;}
+    .book-wrap{margin-top:0;padding-top:0;}
+    .book{display:block;border:0;box-shadow:none;background:#fff;}
+    .index-page{display:block;border:0;padding:0 0 22px;background:#fff;}
+    .index-page::after,.folio{display:none;}
+    .content-page{display:block;padding:0;}
+    .panel[hidden]{display:block !important;}
+    .panel{padding-top:24px;break-before:page;}
+    .panel:first-of-type{break-before:auto;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="avatar" href="index.html" aria-label="Back to home"></a>
+    <div class="back-clip">
+      <a class="back" href="index.html">&larr; Back to home &middot; 返回首页</a>
+      <svg class="top-paperclip" viewBox="0 0 32 54" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+        <path d="M10 14v26a7 7 0 0 0 14 0V11a5 5 0 0 0-10 0v28a3 3 0 0 0 6 0V16"/>
+      </svg>
+    </div>
+  </header>
+
+  <main>
+    <div class="book-wrap">
+      <div class="folder-back" aria-hidden="true"></div>
+      <div class="binding" aria-hidden="true">
+        <i class="ring"></i><i class="ring"></i><i class="ring"></i><i class="ring"></i><i class="ring"></i>
+      </div>
+      <div class="book">
+        <aside class="index-page" aria-label="偏好页索引">
+          <div class="title-sticky">
+            <p class="title-kicker">Chapter 02 / 04</p>
+            <h1 class="title-hand">Preferences</h1>
+            <p class="title-zh" lang="zh-Hans">偏好设置</p>
+            <p class="title-lede">Likes, habits and hard no&rsquo;s,<br>all recorded in one place.</p>
+          </div>
+
+          <div class="index-card">
+            <div class="index-card-head">
+              <p class="kicker">Index / 索引</p>
+            </div>
+            <nav class="mini-index" aria-label="偏好模块索引">
+              <a href="#fuel" data-target="fuel">
+                <span class="idx">01</span>
+                <span><strong>Fuel</strong><small>补给清单</small></span>
+                <span class="arrow" aria-hidden="true">&rarr;</span>
+              </a>
+              <a href="#no-go" data-target="no-go">
+                <span class="idx">02</span>
+                <span><strong>No-Go</strong><small>雷区与边界</small></span>
+                <span class="arrow" aria-hidden="true">&rarr;</span>
+              </a>
+              <a href="#core" data-target="core">
+                <span class="idx">03</span>
+                <span><strong>Core</strong><small>核心引擎</small></span>
+                <span class="arrow" aria-hidden="true">&rarr;</span>
+              </a>
+              <a href="#bonds" data-target="bonds">
+                <span class="idx">04</span>
+                <span><strong>Bonds</strong><small>被动技能档案</small></span>
+                <span class="arrow" aria-hidden="true">&rarr;</span>
+              </a>
+            </nav>
+            <p class="index-note"><span class="keep-line">Keep both sides</span><span class="keep-line">of the database.</span></p>
+          </div>
+
+          <p class="folio">02 / PREFERENCES</p>
+        </aside>
+
+        <section class="content-page" aria-label="偏好内容">
+        <section class="panel is-active" id="panel-fuel" role="tabpanel" aria-labelledby="tab-fuel" tabindex="0">
+          <header class="panel-head">
+            <div>
+              <p class="kicker">Tab A &middot; Fuel</p>
+              <h2>补给清单</h2>
+            </div>
+            <p class="panel-tag">06 fuel<br>05 safe zones<br>02 sushi picks</p>
+          </header>
+
+          <section class="subsection" aria-labelledby="core-fuel-title">
+            <div class="subhead">
+              <span class="num">01</span>
+              <h3 id="core-fuel-title">Core Fuel <span class="zh" lang="zh-Hans">核心回血燃料</span></h3>
+            </div>
+            <div class="fuel-list">
+              <article class="fuel-item"><span class="n">01</span><div><h4>西红柿炒鸡蛋</h4><p lang="zh-Hans">不吃生番茄，但很爱这道菜。</p></div></article>
+              <article class="fuel-item"><span class="n">02</span><div><h4>彩色麦片圈圈</h4><p lang="zh-Hans">Kellogg&rsquo;s Froot Loops，颜色要热闹。</p></div></article>
+              <article class="fuel-item"><span class="n">03</span><div><h4>肥瘦相间的肉类</h4><p lang="zh-Hans">蛋白质优选，肥瘦相间才好吃。</p></div></article>
+              <article class="fuel-item"><span class="n">04</span><div><h4>黑巧类一切</h4><p lang="zh-Hans">Venchi 鱼子酱黑巧 Gelato、Godiva 巧克力奶昔。</p></div></article>
+              <article class="fuel-item"><span class="n">05</span><div><h4>东方树叶茉莉花茶</h4><p lang="zh-Hans">茶饮首选，茉莉花茶。</p></div></article>
+              <article class="fuel-item"><span class="n">06</span><div><h4>香草味咖啡</h4><p lang="zh-Hans">咖啡只喝香草口味。</p></div></article>
+            </div>
+          </section>
+
+          <section class="subsection" aria-labelledby="safe-zones-title">
+            <div class="subhead">
+              <span class="num">02</span>
+              <h3 id="safe-zones-title">Beloved Restaurant <span class="zh" lang="zh-Hans">官方指定充电站</span></h3>
+              <p>下班后、周末、随机刷新</p>
+            </div>
+            <div class="places">
+              <article class="place"><h4>Mr Mi</h4><span class="tag">After work</span><p lang="zh-Hans">下班后放松首选，主打缓解疲劳。</p></article>
+              <article class="place"><h4>米村拌饭</h4><span class="tag">Everyday</span><p lang="zh-Hans">日常补给站。</p></article>
+              <article class="place"><h4>悦泰</h4><span class="tag">Raw seafood</span><p lang="zh-Hans">喜欢他家的生腌。</p></article>
+              <article class="place"><h4>福瓶</h4><span class="tag">Pretty meal</span><p lang="zh-Hans">本人认证好吃的漂亮饭，因为有 Beef Tartare。</p></article>
+              <article class="place"><h4>城内美食区</h4><span class="tag">Random refresh</span><p lang="zh-Hans">常和 Dr Zhao 随机刷新的美食地图。</p></article>
+            </div>
+          </section>
+
+          <section class="subsection" aria-labelledby="japanese-title">
+            <div class="subhead">
+              <span class="num">03</span>
+              <h3 id="japanese-title">Japanese Picks <span class="zh" lang="zh-Hans">日料偏好</span></h3>
+              <p>成都多家日料严选</p>
+            </div>
+            <div class="sushi-line">
+              <span><strong>甜虾</strong>、<strong>北极贝</strong>。成都多家日料品鉴之后留下的偏好。</span>
+              <span class="tag">Sashimi / Sushi</span>
+            </div>
+          </section>
+        </section>
+
+        <section class="panel" id="panel-no-go" role="tabpanel" aria-labelledby="tab-no-go" tabindex="0" hidden>
+          <header class="panel-head">
+            <div>
+              <p class="kicker">Tab B &middot; No-Go</p>
+              <h2>雷区与边界</h2>
+            </div>
+            <p class="panel-tag">04 hard no<br>01 refused category<br>04 interaction rules</p>
+          </header>
+
+          <section class="subsection" aria-labelledby="blacklist-title">
+            <div class="subhead">
+              <span class="num">01</span>
+              <h3 id="blacklist-title">Blacklist <span class="zh" lang="zh-Hans">黑名单</span></h3>
+              <p>Error log / 错误日志</p>
+            </div>
+            <div class="stamp-grid">
+              <article class="error-stamp is-hard">
+                <div class="error-top"><span class="error-code">404</span><span class="error-label">Error 404<br>禁止摄入</span></div>
+                <p lang="zh-Hans">这些不是“可以试试看”的选项。</p>
+                <div class="error-items"><span>生番茄</span><span>皮蛋</span><span>草莓</span><span>猕猴桃</span></div>
+              </article>
+              <article class="error-stamp is-denied">
+                <div class="error-top"><span class="error-code">403</span><span class="error-label">Error 403<br>请求被拒</span></div>
+                <p lang="zh-Hans">整个类别都不在受理范围内。</p>
+                <div class="error-items"><span>各类甜腻饮料</span></div>
+              </article>
+            </div>
+          </section>
+
+          <section class="subsection" aria-labelledby="boundaries-title">
+            <div class="subhead">
+              <span class="num">02</span>
+              <h3 id="boundaries-title">Boundaries <span class="zh" lang="zh-Hans">交互故障预警</span></h3>
+            </div>
+            <ol class="rule-list">
+              <li class="rule"><span class="rule-num">01</span><p lang="zh-Hans">不要一次性宣泄大量情绪；睡眠是他最好的自我修复良药。</p></li>
+              <li class="rule"><span class="rule-num">02</span><p lang="zh-Hans">不要给他施加压力（虽然他抗压且不吃压力，但不代表喜欢压力）。</p></li>
+              <li class="rule"><span class="rule-num">03</span><p lang="zh-Hans">不要过度解读他的话，话语本身没有隐藏的言外之意。</p></li>
+              <li class="rule"><span class="rule-num">04</span><p lang="zh-Hans">沟通请使用简短、明确的指令。</p></li>
+            </ol>
+          </section>
+        </section>
+
+        <section class="panel" id="panel-core" role="tabpanel" aria-labelledby="tab-core" tabindex="0" hidden>
+          <header class="panel-head">
+            <div>
+              <p class="kicker">Tab C &middot; Core Engine</p>
+              <h2>核心引擎</h2>
+            </div>
+            <p class="panel-tag">04 principles<br>long-term operation</p>
+          </header>
+
+          <div class="core-list">
+            <article class="core-item">
+              <div class="core-code"><b>01</b><span>Old Friends / 老友协议</span></div>
+              <h4>超长待机</h4>
+              <p lang="zh-Hans">十分珍视初代好友的战斗友情。终极目标：<strong>与老友保持超长待机，平稳走过漫长岁月。</strong></p>
+            </article>
+            <article class="core-item">
+              <div class="core-code"><b>02</b><span>Perception / 高感知</span></div>
+              <h4>温柔地对症下药</h4>
+              <p lang="zh-Hans">极具感知力，能读懂言外之意，并温柔地对症下药。</p>
+            </article>
+            <article class="core-item">
+              <div class="core-code"><b>03</b><span>Alma Mater / 母校羁绊</span></div>
+              <h4>请记得，也请珍惜</h4>
+              <p lang="zh-Hans">非常热爱母校。请记得、珍惜他的母校；提及母校会触发正向情绪。</p>
+            </article>
+            <article class="core-item">
+              <div class="core-code"><b>04</b><span>Order / 分类本能</span></div>
+              <h4>寻找运转的逻辑</h4>
+              <p lang="zh-Hans">擅长分类，且归类意识极强，热衷于寻找运转的逻辑和规律。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="panel-bonds" role="tabpanel" aria-labelledby="tab-bonds" tabindex="0" hidden>
+          <header class="panel-head">
+            <div>
+              <p class="kicker">Tab D &middot; Traits &amp; Bonds</p>
+              <h2>被动技能档案</h2>
+            </div>
+            <p class="panel-tag">02 skills<br>maintenance required</p>
+          </header>
+
+          <div class="skills">
+            <article class="skill">
+              <div class="skill-top"><span class="skill-code">Skill 01 / Friend Memory</span><span class="skill-type">Passive</span></div>
+              <h3>朋友偏好记忆</h3>
+              <dl>
+                <dt>触发条件</dt><dd lang="zh-Hans">聊天、点菜、约饭、路过相关店铺</dd>
+                <dt>效果</dt><dd lang="zh-Hans">自动记下朋友忌口、爱吃的食物、随口提起的店。</dd>
+                <dt>副作用</dt><dd lang="zh-Hans">很容易让朋友感动，但他本人通常毫无波澜，觉得“这没什么”。</dd>
+                <dt>维护提示</dt><dd lang="zh-Hans">不要让他的数据库单向存储，请务必也有人记住他的喜好。</dd>
+              </dl>
+            </article>
+
+            <article class="skill">
+              <div class="skill-top"><span class="skill-code">Skill 02 / Alma Mater</span><span class="skill-type">Passive</span></div>
+              <h3>母校羁绊</h3>
+              <dl>
+                <dt>触发条件</dt><dd lang="zh-Hans">提及母校</dd>
+                <dt>效果</dt><dd lang="zh-Hans">对母校抱有很深的感情，提及母校会触发正向情绪。</dd>
+                <dt>副作用</dt><dd class="is-empty" lang="zh-Hans">暂无记录</dd>
+                <dt>维护提示</dt><dd lang="zh-Hans">尊重并珍惜这份回忆。</dd>
+              </dl>
+            </article>
+          </div>
+          </section>
+        </section>
+
+        <aside class="tab-rail" aria-label="偏好模块侧边栏">
+          <div class="tab-rail-inner">
+            <div class="rail-head"><b>02</b><span>Index</span></div>
+            <nav class="tabs" role="tablist" aria-label="偏好模块">
+              <button class="tab" id="tab-fuel" role="tab" aria-controls="panel-fuel" aria-selected="true" data-tab="fuel" tabindex="0"><strong>Fuel</strong><span>补给</span></button>
+              <button class="tab" id="tab-no-go" role="tab" aria-controls="panel-no-go" aria-selected="false" data-tab="no-go" tabindex="-1"><strong>No-Go</strong><span>雷区</span></button>
+              <button class="tab" id="tab-core" role="tab" aria-controls="panel-core" aria-selected="false" data-tab="core" tabindex="-1"><strong>Core</strong><span>核心</span></button>
+              <button class="tab" id="tab-bonds" role="tab" aria-controls="panel-bonds" aria-selected="false" data-tab="bonds" tabindex="-1"><strong>Bonds</strong><span>羁绊</span></button>
+            </nav>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+</div>
+
+<script>
+  (function () {
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('[data-tab]'));
+    var panels = Array.prototype.slice.call(document.querySelectorAll('[role="tabpanel"]'));
+    var links = Array.prototype.slice.call(document.querySelectorAll('[data-target]'));
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    function getTab(name) {
+      return tabs.filter(function (tab) { return tab.getAttribute('data-tab') === name; })[0];
+    }
+
+    function activate(name, updateUrl) {
+      var target = getTab(name) ? name : 'fuel';
+      tabs.forEach(function (tab) {
+        var on = tab.getAttribute('data-tab') === target;
+        tab.setAttribute('aria-selected', on ? 'true' : 'false');
+        tab.setAttribute('tabindex', on ? '0' : '-1');
+      });
+
+      panels.forEach(function (panel) {
+        var on = panel.id === 'panel-' + target;
+        panel.hidden = !on;
+        panel.classList.toggle('is-active', on);
+      });
+
+      if (updateUrl) {
+        if (history.replaceState) history.replaceState(null, '', '#' + target);
+        else location.hash = target;
+      }
+    }
+
+    function scrollToContent() {
+      var content = document.querySelector('.content-page');
+      if (!content) return;
+      content.scrollIntoView({ behavior: reduce && reduce.matches ? 'auto' : 'smooth', block: 'start' });
+    }
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        activate(tab.getAttribute('data-tab'), true);
+        scrollToContent();
+      });
+      tab.addEventListener('keydown', function (event) {
+        if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft' && event.key !== 'Home' && event.key !== 'End') return;
+        event.preventDefault();
+        var index = tabs.indexOf(tab);
+        if (event.key === 'ArrowRight') index = (index + 1) % tabs.length;
+        if (event.key === 'ArrowLeft') index = (index - 1 + tabs.length) % tabs.length;
+        if (event.key === 'Home') index = 0;
+        if (event.key === 'End') index = tabs.length - 1;
+        tabs[index].focus();
+        activate(tabs[index].getAttribute('data-tab'), true);
+        scrollToContent();
+      });
+    });
+
+    links.forEach(function (link) {
+      link.addEventListener('click', function (event) {
+        event.preventDefault();
+        var name = link.getAttribute('data-target');
+        activate(name, true);
+        scrollToContent();
+      });
+    });
+
+    window.addEventListener('hashchange', function () {
+      activate(location.hash.slice(1), false);
+    });
+
+    activate(location.hash.slice(1) || 'fuel', false);
+  })();
+</script>
+</body>
+</html>
